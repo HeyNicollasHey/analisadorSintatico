@@ -87,10 +87,7 @@ public class PalavrasChave {
     } else if (palavra1.equals(TRUE)) {
 
       return Token.TRUE;
-    } else if(palavra1.equals(FLOAT)){
 
-      resultado = Token.FLOAT;
-    	
     } else {
         
       resultado = Token.WHILE;

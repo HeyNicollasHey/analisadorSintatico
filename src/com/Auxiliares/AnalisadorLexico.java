@@ -531,7 +531,7 @@ public class AnalisadorLexico {
 			  } else {
 				  retoneparaBuffer(caractere);
 				  valorAtual = Float.valueOf(sBuffer.toString());
-				  tipoAtual = Token.FLOAT;
+				  tipoAtual = Token.LITERALFLOAT;
 				  feito = true;
 			  }
 

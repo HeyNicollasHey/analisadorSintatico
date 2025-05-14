@@ -218,7 +218,8 @@ public class Parser {
       tipoExpr = (tipoEsquerdo.equals("float") || tipoExpr.equals("float")) ? "float" : "int";
 
 
-      tipoExpr = "int";
+      tipoExpr = (tipoEsquerdo.equals("float") || tipoExpr.equals("float")) ? "float" : "int";
+
     }
 
     System.out.print(" ]ae");
@@ -254,7 +255,7 @@ public class Parser {
       tipoExpr = (tipoEsquerdo.equals("float") || tipoExpr.equals("float")) ? "float" : "int";
 
 
-      tipoExpr = "int"; // resultado de uma operação aritmética é int
+
     }
 
     System.out.print(" ]me");
@@ -278,11 +279,12 @@ public class Parser {
       tipoOperando = "int";
       resultado = match(Token.LITERALNUMERICO);
     }
-    // ? Suporte a float (corrigido!)
-    else if (token.getTipo() == Token.FLOAT) {
+    else if (token.getTipo() == Token.LITERALFLOAT) {
       tipoOperando = "float";
-      resultado = match(Token.FLOAT);
+      resultado = match(Token.LITERALFLOAT);
     }
+
+
     // Palavra-chave true ou false
     else if (token.getTipo() == Token.TRUE || token.getTipo() == Token.FALSE) {
       tipoOperando = "bool";
@@ -318,11 +320,10 @@ public class Parser {
 
       }
 
-      if( tipoToken == Token.LITERALNUMERICO ) {
-
-        System.out.print( token.getValor() );
-
+      if (tipoToken == Token.LITERALNUMERICO || tipoToken == Token.LITERALFLOAT) {
+        System.out.print(token.getValor());
       }
+
 
       token = analisadorLexico.pegarProximoToken();
 
@@ -339,10 +340,14 @@ public class Parser {
   }
 
   private boolean match(int tipoToken, int valorToken) throws IOException, LexerException {
-		
+
     boolean resultado;
-	    
-    if ( token.getTipo() == tipoToken  && (Integer)token.getValor() == valorToken )  {
+
+
+    if (token.getTipo() == tipoToken &&
+            token.getValor() != null &&
+            token.getValor() instanceof Integer &&
+            ((Integer) token.getValor()) == valorToken)  {
 	
       switch( tipoToken ) {
       

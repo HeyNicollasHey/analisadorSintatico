@@ -67,7 +67,7 @@ public class Token {
   public static final int PV = 5;
   public static final int VG = 6;
   public static final int TRUE = 7;
-  public static final int FLOAT = 30;
+    public static final int LITERALFLOAT = 31;
 
 
     // Atributos
@@ -215,9 +215,6 @@ public class Token {
 
 	    case PONTUACAO: resultado = "pontuação";
 	    	        break;
-
-          case FLOAT: resultado = "float";
-                    break;
 
       }
 	
