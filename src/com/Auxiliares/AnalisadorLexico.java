@@ -1,8 +1,11 @@
-
+//1-alterar o reconhecimento de tokens de java para a linguagem alvo
+//2-incrementar o reconhecimento de tokens que nao está presentes
 package com.Auxiliares;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.Erro.LexerException;
 
@@ -15,13 +18,13 @@ public class AnalisadorLexico {
   private int buffer;
   private boolean bufferValid = false;
 
+
   public AnalisadorLexico(BufferedReader reader) {
 		
 	this.reader = reader;
 	
   }
 	
-  //método usado para reconhecer os tokens. no final, ele gera um token ou lança uma exception caso nao reconheça a cadeia
   public Token pegarProximoToken() throws IOException, LexerException {
 			
 	boolean feito = false;
@@ -55,8 +58,7 @@ public class AnalisadorLexico {
 		    		
 			  estado = 1;
 			  tipoAtual = Token.RELOP;
-			  valorAtual = new Integer( Token.LT );
-
+			  valorAtual = Integer.valueOf( Token.LT );//less than
 			
 		    }break;
 		    
@@ -64,7 +66,7 @@ public class AnalisadorLexico {
 		        
 		      estado = 10;
 		  	  tipoAtual = Token.RELOP;
-		  	  valorAtual = new Integer( Token.GT );
+		  	  valorAtual = Integer.valueOf( Token.GT );
 		  	
 		    }break;
 
@@ -72,40 +74,36 @@ public class AnalisadorLexico {
 
 			  estado = 4;
 		      tipoAtual = Token.AT;
-		      valorAtual = new Integer( Token.ATR );
+		      valorAtual = Integer.valueOf( Token.ATR );
 		      
 		    }break;
 		    
 		    case '!': {
-		        	
+
 		      estado = 7;
 		      tipoAtual = Token.LOG;
-		      valorAtual = new Integer( Token.NOT );
+		      valorAtual = Integer.valueOf( Token.NOT );
 		      
 		    }break;
 		    
 		    case '+': {
 		    	
 		      tipoAtual = Token.OP;
-		      valorAtual = new Integer( Token.AD );
+		      valorAtual = Integer.valueOf( Token.AD );
 		      
 		      feito = true;
 		      
 		    }break;
 
 		    case '-': {
-			      
-		      tipoAtual = Token.OP;
-			  valorAtual = new Integer( Token.SUB );
-			  
-		      feito = true;
-			  
+				estado = 51;
+
 		    }break;
 
 		    case '*': {
 			  
 		      tipoAtual = Token.OP;
-			  valorAtual = new Integer( Token.MUL );
+			  valorAtual = Integer.valueOf( Token.MUL );
 			 
 			  feito = true;
 			  
@@ -122,7 +120,7 @@ public class AnalisadorLexico {
 		      estado = 28;
 		      
 		    }break;
-		    
+
 		    case '|': {
 		    	
 		      estado = 32;
@@ -132,7 +130,7 @@ public class AnalisadorLexico {
 		    case ',': {
 		    	
 			  tipoAtual = Token.PONTUACAO;
-			  valorAtual = new Integer( Token.VG );
+			  valorAtual = Integer.valueOf( Token.VG );
 			  
 			  feito = true;
 			  
@@ -141,7 +139,7 @@ public class AnalisadorLexico {
 		    case ';': {
 		    	
 			  tipoAtual = Token.PONTUACAO;
-			  valorAtual = new Integer( Token.PV );
+			  valorAtual = Integer.valueOf( Token.PV );
 			
 			  feito = true;
 			
@@ -150,7 +148,7 @@ public class AnalisadorLexico {
 		    case '(': {
 		    	
 			  tipoAtual = Token.PONTUACAO;
-			  valorAtual = new Integer( Token.AP );
+			  valorAtual = Integer.valueOf( Token.AP );
 			
 			  feito = true;
 
@@ -159,7 +157,7 @@ public class AnalisadorLexico {
 		    case ')': {
 		    	
 			  tipoAtual = Token.PONTUACAO;
-			  valorAtual = new Integer( Token.FP );
+			  valorAtual = Integer.valueOf( Token.FP );
 			
 			  feito = true;
 			  
@@ -169,7 +167,7 @@ public class AnalisadorLexico {
 		    	
 		    	
 			  tipoAtual = Token.PONTUACAO;
-			  valorAtual = new Integer( Token.AC );
+			  valorAtual = Integer.valueOf( Token.AC );
 			
 			  feito = true;
 				
@@ -178,7 +176,7 @@ public class AnalisadorLexico {
 		    case '}': {
 		    
 		      tipoAtual = Token.PONTUACAO;
-			  valorAtual = new Integer( Token.FC );
+			  valorAtual = Integer.valueOf( Token.FC );
 			
 			  feito = true;
 			
@@ -199,7 +197,7 @@ public class AnalisadorLexico {
 					
 		  if ( caractere == '=' ) {
 						
-		    valorAtual = new Integer( Token.LE );
+		    valorAtual = Integer.valueOf( Token.LE );
 			feito = true;
 			
 		  } else {
@@ -215,10 +213,10 @@ public class AnalisadorLexico {
 					
 		  if ( caractere == '=' ) {
 		
-		    tipoAtual = Token.RELOP;  
-		    valorAtual = new Integer( Token.EQ );
+		    tipoAtual = Token.RELOP;
+		    valorAtual = Integer.valueOf( Token.EQ );
 			
-		    feito = true;
+		    feito = true;//identifiquei um token, nao precisa continuar no while
 			
 		  } else {
 			  
@@ -234,7 +232,7 @@ public class AnalisadorLexico {
 		  if ( caractere == '=' ) {
 						
 		    tipoAtual = Token.RELOP;  
-			valorAtual = new Integer( Token.NE );
+			valorAtual = Integer.valueOf( Token.NE );
 			feito = true;
 			
 		  } else {
@@ -250,7 +248,7 @@ public class AnalisadorLexico {
 			      
 		  if ( caractere == '=' ) {
 							
-			valorAtual = new Integer( Token.GE );
+			valorAtual = Integer.valueOf( Token.GE );
 			feito = true;
 			
 		  } else {
@@ -298,7 +296,7 @@ public class AnalisadorLexico {
 		  } else {
 			  
             tipoAtual = Token.OP;
-            valorAtual = new Integer( Token.DIV );
+            valorAtual = Integer.valueOf( Token.DIV );
             
 			retoneparaBuffer( caractere );
 			feito = true;
@@ -312,7 +310,7 @@ public class AnalisadorLexico {
 		  if( caractere == '&' ) {
 			  
 		    tipoAtual = Token.LOG;
-		    valorAtual = new Integer( Token.AND );
+		    valorAtual = Integer.valueOf( Token.AND );
 		    
 		    feito = true;
 		    
@@ -347,7 +345,7 @@ public class AnalisadorLexico {
 		  if( caractere == '|' ) {
 			   
 		    tipoAtual = Token.LOG;
-			valorAtual = new Integer( Token.OR );
+			valorAtual = Integer.valueOf( Token.OR );
 			
 		    feito = true;
 
@@ -383,7 +381,7 @@ public class AnalisadorLexico {
 		case 36: {
 			
 		  if ( Character.isLetterOrDigit( caractere ) || caractere == '_' ) {
-					
+
 			estado = 36;
 			
 			sBuffer.append( (char) caractere );
@@ -428,26 +426,28 @@ public class AnalisadorLexico {
 		  }
 
 		}break;
-		
-		case 39: {
-		  
-		  if ( Character.isDigit( caractere ) ) {
-				
-		    estado = 39;
-			sBuffer.append( ( char) caractere );
-			
-		  } else {
 
-		    retoneparaBuffer( caractere );  
-			
-		    valorAtual = new Integer( sBuffer.toString() );
-			feito = true; 
-			
-		  }
-	
-		}break;
-		
-		case 41: {
+		  case 39: {
+
+			  if ( Character.isDigit( caractere ) ) {
+				  sBuffer.append((char) caractere);
+				  estado = 39;
+
+			  } else if (caractere == '.') {
+				  sBuffer.append((char) caractere);
+				  estado = 45;
+
+			  } else {
+				  retoneparaBuffer(caractere);
+				  valorAtual = Integer.valueOf(sBuffer.toString());
+				  tipoAtual = Token.LITERALNUMERICO;
+				  feito = true;
+			  }
+
+		  } break;
+
+
+		  case 41: {
 			
 		  if( caractere == '\'' ) {
 			 
@@ -521,8 +521,24 @@ public class AnalisadorLexico {
 		  }
 		  
 		}break;
-		
-		case 46: {
+
+		  case 45: {
+
+			  if (Character.isDigit(caractere)) {
+				  sBuffer.append((char) caractere);
+				  estado = 45;
+
+			  } else {
+				  retoneparaBuffer(caractere);
+				  valorAtual = Float.valueOf(sBuffer.toString());
+				  tipoAtual = Token.FLOAT;
+				  feito = true;
+			  }
+
+		  } break;
+
+
+		  case 46: {
 			
 	      if( caractere == '"' ) {
 	    	
@@ -553,20 +569,20 @@ public class AnalisadorLexico {
 		  } else if( caractere == '\\' ){
 
 			estado = 48;
-			
+
 			sBuffer.append( (char) caractere );
 		    
 		  } else {
 				
 		    retoneparaBuffer( caractere );
 		    estado = 49;
-		    
+	    
 		  }
-
+ 
 		}break;
 		
 		case 48: {
-			
+
 		  if( caractere == '\\' || caractere == 'r' || caractere == 't' || caractere == 'n' ) {
 
 		    estado = 47;
@@ -580,7 +596,7 @@ public class AnalisadorLexico {
 		  }
 		  
 		}break;
-		
+
 		case 49: {
 			
 		  if( caractere == '"' ) {
@@ -596,7 +612,7 @@ public class AnalisadorLexico {
 		  }
 		  
 		}break;
-		
+
 		default: {
 						
 		  throw new Error("Estado nao esperado!!!");
@@ -606,7 +622,7 @@ public class AnalisadorLexico {
 	  }
 		
 	}
-	
+	//System.out.println(estado);
 	return new Token( tipoAtual, valorAtual );
 	
   }

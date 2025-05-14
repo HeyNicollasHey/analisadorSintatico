@@ -208,6 +208,15 @@ public class Parser {
         mensagemErro = "Erro semântico: operação aritmética com tipos incompatíveis";
         return false;
       }
+      if (!(tipoEsquerdo.equals("int") || tipoEsquerdo.equals("float")) ||
+              !(tipoExpr.equals("int") || tipoExpr.equals("float"))) {
+        mensagemErro = "Erro semântico: operação aritmética com tipos incompatíveis";
+        return false;
+      }
+
+// Resultado da expressão: se houver float, tudo vira float
+      tipoExpr = (tipoEsquerdo.equals("float") || tipoExpr.equals("float")) ? "float" : "int";
+
 
       tipoExpr = "int";
     }
@@ -235,6 +244,15 @@ public class Parser {
         mensagemErro = "Erro semântico: operação de multiplicação/divisão com tipos incompatíveis";
         return false;
       }
+      if (!(tipoEsquerdo.equals("int") || tipoEsquerdo.equals("float")) ||
+              !(tipoExpr.equals("int") || tipoExpr.equals("float"))) {
+        mensagemErro = "Erro semântico: operação aritmética com tipos incompatíveis";
+        return false;
+      }
+
+// Resultado da expressão: se houver float, tudo vira float
+      tipoExpr = (tipoEsquerdo.equals("float") || tipoExpr.equals("float")) ? "float" : "int";
+
 
       tipoExpr = "int"; // resultado de uma operação aritmética é int
     }
@@ -251,19 +269,32 @@ public class Parser {
     System.out.print("UE[ ");
 
     if (match(Token.PONTUACAO, Token.AP)) {
-      resultado = LE(); // processa a expressão entre parênteses
+      resultado = LE();
       tipoOperando = tipoExpr;
       resultado &= match(Token.PONTUACAO, Token.FP);
-    } else if (token.getTipo() == Token.LITERALNUMERICO) {
+    }
+    // Suporte a números inteiros
+    else if (token.getTipo() == Token.LITERALNUMERICO) {
       tipoOperando = "int";
       resultado = match(Token.LITERALNUMERICO);
-    } else if (token.getTipo() == Token.TRUE || token.getTipo() == Token.FALSE) {
+    }
+    // ? Suporte a float (corrigido!)
+    else if (token.getTipo() == Token.FLOAT) {
+      tipoOperando = "float";
+      resultado = match(Token.FLOAT);
+    }
+    // Palavra-chave true ou false
+    else if (token.getTipo() == Token.TRUE || token.getTipo() == Token.FALSE) {
       tipoOperando = "bool";
       resultado = match(token.getTipo());
-    } else if (match(Token.ID)) {
-      tipoOperando = "int"; // ou recuperar da tabela de símbolos, se existisse
+    }
+    // Identificadores (ex: variáveis)
+    else if (match(Token.ID)) {
+      tipoOperando = "int"; // suposição padrão
       resultado = true;
-    } else if (match(Token.OP, Token.AD) || match(Token.OP, Token.SUB) || match(Token.LOG, Token.NOT)) {
+    }
+    // Operadores unários (ex: -x, +x, !x)
+    else if (match(Token.OP, Token.AD) || match(Token.OP, Token.SUB) || match(Token.LOG, Token.NOT)) {
       resultado = UE();
       tipoOperando = tipoExpr;
     }
@@ -278,35 +309,35 @@ public class Parser {
   private boolean match(int tipoToken) throws IOException, LexerException {
 
     boolean resultado;
-    
+
     if ( token.getTipo() == tipoToken ) {
-           
+
       if( tipoToken == Token.ID ) {
-    	  
+
         System.out.print( "Id" );
-    	  
+
       }
-      
+
       if( tipoToken == Token.LITERALNUMERICO ) {
-    	  
+
         System.out.print( token.getValor() );
-    	  
+
       }
 
       token = analisadorLexico.pegarProximoToken();
-      
+
       resultado = true;
-		
+
     }else {
-	    	
+
       resultado = false;
-    
+
     }
-    
+
     return resultado;
-	
+
   }
-  
+
   private boolean match(int tipoToken, int valorToken) throws IOException, LexerException {
 		
     boolean resultado;

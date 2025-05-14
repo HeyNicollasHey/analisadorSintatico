@@ -16,6 +16,7 @@ public class PalavrasChave {
   private static final String VOID   = "void";
   private static final String WHILE = "while";
   public static final String TRUE = "true";
+  public static final String FLOAT = "float";
     
   public static boolean isPalavraChave(StringBuffer palavra) {
 
@@ -23,7 +24,7 @@ public class PalavrasChave {
 	
     if ( palavra1.equals(CHAR) || palavra1.equals(ELSE) || palavra1.equals(FALSE) || palavra1.equals(INT) || palavra1.equals(IF)
       || palavra1.equals(MAIN) || palavra1.equals(OUT) || palavra1.equals(PRINTF) || palavra1.equals(RETURN)
-      || palavra1.equals(STATIC) || palavra1.equals(VOID) || palavra1.equals(WHILE) || palavra1.equals(TRUE)) {
+      || palavra1.equals(STATIC) || palavra1.equals(VOID) || palavra1.equals(WHILE) || palavra1.equals(TRUE) || palavra1.equals(FLOAT)) {
 	
       return true;
   
@@ -83,9 +84,12 @@ public class PalavrasChave {
 
       resultado = Token.VOID;
 
-    } else if (palavra1.equals(TRUE)){
+    } else if (palavra1.equals(TRUE)) {
 
       return Token.TRUE;
+    } else if(palavra1.equals(FLOAT)){
+
+      resultado = Token.FLOAT;
     	
     } else {
         
